@@ -11,29 +11,6 @@
   //This information needs to be removed then pulled with an AJAX Call using the Fetch API
   //this is the api url https://swiftpixel.com/earbud/api/infoboxes"
 
-  const infoBoxes = [
-    {
-      title: 'Noise-cancelling microphones',
-      text: 'Noise-cancelling microphones and a rear copper shield are optimally placed to quickly detect outside noises, working together to counter noise before it disturbs your experience.',
-      image: 'images/ear-piece.jpg'
-    },
-    {
-      title: 'Comfortable fit',
-      text: 'Three pairs of ultra comfortable silicone tips are included. The tips create an acoustic seal that blocks outside audio and secures the earbuds in place.',
-      image: 'images/ear-piece.jpg'
-    },
-    {
-      title: '360 AUDIO',
-      text: '360 Audio places sound all around you, while Dolby Head Tracking™ technology delivers an incredible three-dimensional listening experience.',
-      image: 'images/ear-piece.jpg'
-    },
-    {
-      title: 'Ultra Fast Charging',
-      text: 'Charge your earbuds in 30 minutes or less with our hyper charging technology.',
-      image: 'images/ear-piece.jpg'
-    },
-  ];
-
     //This information needs to be removed then pulled with an AJAX Call using the Fetch API
     //this is the api url https://swiftpixel.com/earbud/api/materials"
 
@@ -70,24 +47,34 @@
   function loadInfoBoxes() {
 
     //make AJAX call here:
-    // https://swiftpixel.com/earbud/api/infoboxes"
+    // "
 
     // the forEach loop will go inside a then()/promise
+    fetch("https://swiftpixel.com/earbud/api/infoboxes")
+    .then(response => response.json())
+    .then(infoBoxes => {
+      console.log(infoBoxes);
 
-
-    infoBoxes.forEach((infoBox, index) => {
+      infoBoxes.forEach((infoBox, index) => {
       let selected = document.querySelector(`#hotspot-${index+1}`);
       
-      const titleElement = document.createElement('h2');
-      titleElement.textContent = infoBox.title;
+      const titleElement = document.createElement('h3');
+      titleElement.textContent = infoBox.heading;
 
+      const imgElement = document.createElement('img');
+      imgElement.src = `images/${infoBox.thumbnail}`;
+      
       const textElement = document.createElement('p');
-      textElement.textContent = infoBox.text;
+      textElement.textContent = infoBox.description;
 
+      selected.appendChild(imgElement);
       selected.appendChild(titleElement);
       selected.appendChild(textElement);
-    });
+        });
+   })
+    .catch(error => console.error(error)); //catch and report any errors
   }
+
   loadInfoBoxes();
 
   // accessing to the array
