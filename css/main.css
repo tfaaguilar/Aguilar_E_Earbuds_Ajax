@@ -31,6 +31,10 @@ model-viewer {
   margin: 0 auto;
 }
 
+#model svg {
+  max-width: 100px;
+}
+
 .Hotspot {
   background: url(../images/hotspot.svg) center no-repeat;
   border: 0px;
