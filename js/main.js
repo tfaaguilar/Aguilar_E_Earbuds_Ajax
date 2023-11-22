@@ -4,8 +4,13 @@
   const model = document.querySelector("#model");
   const hotspots = document.querySelectorAll(".Hotspot");
 
+  const container = document.querySelector("#container");
+  
   const materialTemplate = document.querySelector("#material-template");
   const materialList = document.querySelector("#material-list");
+
+ 
+  const errormsg = `<svg height="32" style="overflow:visible;enable-background:new 0 0 32 32" viewBox="0 0 32 32" width="32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><g id="Error_1_"><g id="Error"><circle cx="16" cy="16" id="BG" r="16" style="fill:#D72828;"/><path d="M14.5,25h3v-3h-3V25z M14.5,6v13h3V6H14.5z" id="Exclamatory_x5F_Sign" style="fill:#E6E6E6;"/></g></g></g></svg>`
  
   //spinner
   const spinner = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: ; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -20,25 +25,18 @@
   
   //functions
   function modelLoaded() {
-    
     hotspots.forEach(hotspot => {
       hotspot.style.display = "block";
-
-  
     });
-
-   
   }
 
   function loadInfoBoxes() {
-   
- head.innerHTML = spinner;
+  head.innerHTML = spinner;
  
-
-    fetch("https://swiftpixel.com/earbud/api/infoboxes")
-    .then(response => response.json())
-    .then(infoBoxes => {
-      console.log(infoBoxes);
+  fetch("https://swiftpixel.com/earbd/api/infoboxes")
+  .then(response => response.json())
+  .then(infoBoxes => {
+  console.log(infoBoxes);
 
       infoBoxes.forEach((infoBox, index) => {
       let selected = document.querySelector(`#hotspot-${index+1}`);
@@ -50,64 +48,55 @@
       imgElement.src = `images/${infoBox.thumbnail}`;
       
       const textElement = document.createElement('p');
-        textElement.textContent = infoBox.description;
+      textElement.textContent = infoBox.description;
         
-       
-
       selected.appendChild(imgElement);
       selected.appendChild(titleElement);
       selected.appendChild(textElement);
         
       head.innerHTML = "";
       });
-      
-  
-
-   })
-    .catch(error => console.error(error)); 
+  })
+      .catch(error => {
+        container.innerHTML = errormsg;
+        console.error('Oops, an error occurred while loading resources. Please check your internet connection. ', error);
+    });
   }
-
+  
    loadInfoBoxes();
 
     function loadMaterialInfo() { 
-      fetch("https://swiftpixel.com/earbud/api/materials")
-      .then(response => response.json())
+    fetch("https://swiftpixel.com/earbd/api/materials")
+    .then(response => response.json())
       .then(material_list => {
+        console.log(materialList);
       
-        
         material_list.forEach(material => {
-          
-        const clone = materialTemplate.content.cloneNode(true);
-  
+          const clone = materialTemplate.content.cloneNode(true);
           const materialHeading = clone.querySelector(".material-heading");
           materialHeading.textContent = material.heading;
-  
           const materialDescription = clone.querySelector(".material-description");
           materialDescription.textContent = material.description;
-  
+      
           materialList.appendChild(clone);
         });
-        
-        
-
       })
-
-    }
+      .catch(error => {
+        container.innerHTML = errormsg;
+        console.error('Oops, an error occurred while loading resources. Please check your internet connection.  ', error); 
+      });
+   
+  }
     
   loadMaterialInfo();
-
-
   function showInfo() {
     let selected = document.querySelector(`#${this.slot}`);
     gsap.to(selected, 1, { autoAlpha: 1 });
   }
-
   function hideInfo() {
     let selected = document.querySelector(`#${this.slot}`);
     gsap.to(selected, 1, { autoAlpha: 0 });
   }
-
-  
 
   //Event listeners
   model.addEventListener("load", modelLoaded);
@@ -116,7 +105,5 @@
     hotspot.addEventListener("mouseenter", showInfo);
     hotspot.addEventListener("mouseleave", hideInfo);
   });
-
-
 })();
 
