@@ -33,7 +33,7 @@
   function loadInfoBoxes() {
   head.innerHTML = spinner;
  
-  fetch("https://swiftpixel.com/earbd/api/infoboxes")
+  fetch("https://swiftpixel.com/earbud/api/infoboxes")
   .then(response => response.json())
   .then(infoBoxes => {
   console.log(infoBoxes);
@@ -66,7 +66,7 @@
    loadInfoBoxes();
 
     function loadMaterialInfo() { 
-    fetch("https://swiftpixel.com/earbd/api/materials")
+    fetch("https://swiftpixel.com/earbud/api/materials")
     .then(response => response.json())
       .then(material_list => {
         console.log(materialList);
